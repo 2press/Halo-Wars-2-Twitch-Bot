@@ -93,6 +93,8 @@
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-hot-loader": "^4.13.0",
+    "twitch-auth": "^4.3.8",
+    "twitch-electron-auth-provider": "^4.3.8",
     "typed-rest-client": "^1.8.0"
   }
 }
