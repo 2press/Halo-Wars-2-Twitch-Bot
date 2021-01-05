@@ -3,11 +3,10 @@ import { makeStyles } from "@material-ui/core";
 export const useStyles = makeStyles(() => ({
     root: {
         width: '100%',
-        height: '90vh',
-    },
-
-    container: {
-
+        height: '85vh',
+        display: 'flex',
+        flexDirection: 'row',
+        gap: '2ch',
     },
 
     settingsCard: {
@@ -27,8 +26,8 @@ export const useStyles = makeStyles(() => ({
     },
 
     logs: {
-        minHeight: '50vh',
-        maxHeight: 'min(660px, 90vh)',
+        width: '50%',
+        height: '85vh',
         overflowY: "scroll",
         scrollSnapType: 'y mandatory',
         scrollPadding: '1ch',
@@ -39,6 +38,7 @@ export const useStyles = makeStyles(() => ({
     },
 
     settings: {
+        width: '50%',
         display: 'flex',
         flexDirection: 'column',
         gap: '2ch',

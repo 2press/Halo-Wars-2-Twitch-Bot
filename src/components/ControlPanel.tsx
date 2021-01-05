@@ -12,6 +12,7 @@ import { PlayerStats } from "../rest-client/rest-client";
 import { useStyles } from "./ControlPanel.style";
 import ElectronStore = require('electron-store');
 import moment from "moment";
+import { LogCard } from "./LogCard";
 
 type Props = {}
 
@@ -33,7 +34,7 @@ export const ControlPanel: React.FC<Props> = () => {
     const [command, setCommand] = useState<string>(store.get('command') || '!stats');
     const [ocpKey, setOcpKey] = useState<string>(store.get('ocpKey') || '');
     const [isOpcKeyValid, setIsOpcKeyValid] = useState<boolean>(true);
-    const [botState, setBotState] = useState<'connected' | 'disconnected' | 'loading'>('disconnected');
+    const [botState, setBotState] = useState<'connected' | 'disconnected' | 'connecting'>('disconnected');
     const lastLogRef = useRef(null);
 
     const validateOprKey = () => {
@@ -64,6 +65,10 @@ export const ControlPanel: React.FC<Props> = () => {
         }
     }, [logs]);
 
+    const handleCommandChange = () => {
+        store.set('command', command);
+    };
+
     let botIcon: JSX.Element = null;
     let handleBotAction: () => void = () => { };
 
@@ -72,17 +77,17 @@ export const ControlPanel: React.FC<Props> = () => {
             botIcon = <PauseCircleFilledIcon htmlColor='red' />;
             handleBotAction = () => {
                 ipcRenderer.send('bot-disconnect');
-                setBotState('loading');
+                setBotState('connecting');
             }
             break;
         case 'disconnected':
             botIcon = <PlayCircleFilledIcon htmlColor='green' />;
             handleBotAction = () => {
                 ipcRenderer.send('bot-connect');
-                setBotState('loading');
+                setBotState('connecting');
             }
             break;
-        case 'loading':
+        case 'connecting':
             botIcon = <CircularProgress size={20} />;
             break;
         default:
@@ -91,63 +96,49 @@ export const ControlPanel: React.FC<Props> = () => {
 
     return (
         <div className={classes.root}>
-            <Grid container spacing={2} className={classes.container} alignItems="stretch">
-                <Grid item xs={12} sm={6} className={classes.settings}>
-                    <Card className={classes.settingsCard} variant="outlined">
-                        <CardHeader
-                            action={
-                                <IconButton disabled={botState === "loading"} onClick={handleBotAction}>
-                                    {botIcon}
-                                </IconButton>
-                            }
-                            title="Bot Settings"
-                            subheader={capitalize(botState)}
-                        />
-                        <CardContent className={classes.content}>
-                            <TextField label="Twitch Channel" value={channel} onChange={(event) => setChannel(event.target.value.trim())} onBlur={() => { ipcRenderer.send('change-channel', channel) }} />
-                        </CardContent>
-                        <CardActions>
-                            <Button size="small" onClick={() => { ipcRenderer.send('twitch-logout') }} startIcon={<TwitchIcon htmlColor='#6441a5' />}>Grant Permission</Button>
-                        </CardActions>
-                    </Card>
-                    <Card className={classes.settingsCard} variant="outlined">
-                        <CardHeader
-                            title="Halo War API Settings"
-                            action={
-                                <IconButton onClick={() => shell.openExternal('https://developer.haloapi.com/products')}>
-                                    <HelpOutlineIcon />
-                                </IconButton>
-                            }
-                        />
-                        <CardContent className={classes.content}>
-                            <TextField label="Command" value={command} onChange={(event) => setCommand(event.target.value.trim())} error={command === ''} helperText={command === "" ? "Please enter a command, e.g., '!stats'" : ''} />
-                            <TextField label="Ocp-Apim-Subscription-Key" value={ocpKey} onChange={(event) => setOcpKey(event.target.value.trim())} error={!isOpcKeyValid} helperText={!isOpcKeyValid ? "Please enter a valid Ocp-Apim-Subscription-Key'" : ''} onBlur={validateOprKey} />
-                        </CardContent>
-                    </Card>
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                    <Card className={classes.logs} variant="outlined">
-                        <CardHeader
-                            className={classes.logsHeader}
-                            title="Logs"
-                        />
-                        <CardContent className={classes.content}>
-                            {logs.map((stats, idx, arr) => (
-                                <Card key={stats.key} className={classes.logCard} ref={arr.length - 1 === idx ? lastLogRef : undefined}>
-                                    <CardHeader
-                                        title={`Stats request for ${stats.player}`}
-                                        titleTypographyProps={{ variant: 'subtitle2' }}
-                                        subheaderTypographyProps={{ variant: 'caption' }}
-                                        subheader={moment(stats.time).format()}
-                                        action={
-                                            stats.error ? <ErrorOutlineIcon htmlColor='red' /> : <CheckIcon htmlColor='green' />
-                                        }
-                                    />
-                                </Card>))}
-                        </CardContent>
-                    </Card>
-                </Grid>
-            </Grid>
+            <div className={classes.settings}>
+                <Card className={classes.settingsCard} variant="outlined">
+                    <CardHeader
+                        action={
+                            <IconButton disabled={botState === "connecting"} onClick={handleBotAction}>
+                                {botIcon}
+                            </IconButton>
+                        }
+                        title="Bot Settings"
+                        subheader={capitalize(botState)}
+                    />
+                    <CardContent className={classes.content}>
+                        <TextField label="Twitch Channel" value={channel} onChange={(event) => setChannel(event.target.value.trim())} onBlur={() => { ipcRenderer.send('change-channel', channel) }} />
+                    </CardContent>
+                    <CardActions>
+                        <Button size="small" onClick={() => { ipcRenderer.send('twitch-logout') }} startIcon={<TwitchIcon htmlColor='#6441a5' />}>Grant Permission</Button>
+                    </CardActions>
+                </Card>
+                <Card className={classes.settingsCard} variant="outlined">
+                    <CardHeader
+                        title="Halo War API Settings"
+                        action={
+                            <IconButton onClick={() => shell.openExternal('https://developer.haloapi.com/products')}>
+                                <HelpOutlineIcon />
+                            </IconButton>
+                        }
+                    />
+                    <CardContent className={classes.content}>
+                        <TextField label="Command" value={command} onChange={(event) => setCommand(event.target.value.trim())} error={command === ''} helperText={command === "" ? "Please enter a command, e.g., '!stats'" : ''} onBlur={handleCommandChange} />
+                        <TextField label="Ocp-Apim-Subscription-Key" value={ocpKey} onChange={(event) => setOcpKey(event.target.value.trim())} error={!isOpcKeyValid} helperText={!isOpcKeyValid ? "Please enter a valid key'" : ''} onBlur={validateOprKey} />
+                    </CardContent>
+                </Card>
+            </div>
+            <Card className={classes.logs} variant="outlined">
+                <CardHeader
+                    className={classes.logsHeader}
+                    title="Logs"
+                />
+                <CardContent className={classes.content}>
+                    {logs.map((stats, idx, arr) => (
+                        <LogCard key={stats.key} stats={stats} ref={arr.length - 1 === idx ? lastLogRef : undefined} />))}
+                </CardContent>
+            </Card>
         </div >
     );
 }
