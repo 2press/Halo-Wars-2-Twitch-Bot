@@ -50,7 +50,6 @@ const registerChatClient = () => {
   chatClient.onMessage(async (channel, user, message) => {
     const parts = split(message.trim(), /\s/);
     const command = store.get('command') || '!stats';
-    console.log(parts, parts.slice(1));
     if (parts.length < 2 || parts[0] !== command) return;
     parts.slice(1).forEach(async (player) => {
       const stats = await queryStats(player);
@@ -67,9 +66,8 @@ const registerChatClient = () => {
 const createWindow = async (): Promise<void> => {
   // Create the browser window.
   mainWindow = new BrowserWindow({
-    height: 590,
+    height: 650,
     width: 650,
-    resizable: false,
     webPreferences: {
       nodeIntegration: true,
       enableRemoteModule: true,

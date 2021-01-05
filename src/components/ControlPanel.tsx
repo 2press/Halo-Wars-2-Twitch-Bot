@@ -81,7 +81,7 @@ export const ControlPanel: React.FC<Props> = () => {
             }
             break;
         case 'disconnected':
-            botIcon = <PlayCircleFilledIcon htmlColor='green' />;
+            botIcon = <PlayCircleFilledIcon htmlColor={channel === '' ? 'gray' : 'green'} />;
             handleBotAction = () => {
                 ipcRenderer.send('bot-connect');
                 setBotState('connecting');
@@ -100,7 +100,7 @@ export const ControlPanel: React.FC<Props> = () => {
                 <Card className={classes.settingsCard} variant="outlined">
                     <CardHeader
                         action={
-                            <IconButton disabled={botState === "connecting"} onClick={handleBotAction}>
+                            <IconButton disabled={botState === "connecting" || channel === ''} onClick={handleBotAction}>
                                 {botIcon}
                             </IconButton>
                         }
@@ -108,7 +108,7 @@ export const ControlPanel: React.FC<Props> = () => {
                         subheader={capitalize(botState)}
                     />
                     <CardContent className={classes.content}>
-                        <TextField label="Twitch Channel" value={channel} onChange={(event) => setChannel(event.target.value.trim())} onBlur={() => { ipcRenderer.send('change-channel', channel) }} />
+                        <TextField label="Twitch Channel" value={channel} onChange={(event) => setChannel(event.target.value.trim())} onBlur={() => { ipcRenderer.send('change-channel', channel) }} error={channel === ''} helperText={channel === "" ? "Please enter a valid channel" : ''} />
                     </CardContent>
                     <CardActions>
                         <Button size="small" onClick={() => { ipcRenderer.send('twitch-logout') }} startIcon={<TwitchIcon htmlColor='#6441a5' />}>Grant Permission</Button>
