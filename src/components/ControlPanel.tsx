@@ -1,18 +1,15 @@
-import { Button, Card, CardActions, CardContent, CardHeader, CircularProgress, Grid, IconButton, SvgIcon, SvgIconProps, TextField } from "@material-ui/core";
-import CheckIcon from '@material-ui/icons/Check';
-import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
+import { Button, Card, CardActions, CardContent, CardHeader, CircularProgress, IconButton, SvgIcon, SvgIconProps, TextField } from "@material-ui/core";
 import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
 import PauseCircleFilledIcon from '@material-ui/icons/PauseCircleFilled';
 import PlayCircleFilledIcon from '@material-ui/icons/PlayCircleFilled';
 import { ipcRenderer, shell } from 'electron';
-import { capitalize, uniqueId } from "lodash";
+import { capitalize } from "lodash";
 import React, { useEffect, useRef, useState } from "react";
 import { SampleStore } from "../index";
 import { PlayerStats } from "../rest-client/rest-client";
 import { useStyles } from "./ControlPanel.style";
-import ElectronStore = require('electron-store');
-import moment from "moment";
 import { LogCard } from "./LogCard";
+import ElectronStore = require('electron-store');
 
 type Props = {}
 

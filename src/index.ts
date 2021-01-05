@@ -2,7 +2,7 @@ import { app, BrowserWindow, ipcMain } from 'electron';
 import { split, words } from 'lodash';
 import { ChatClient } from 'twitch-chat-client';
 import { ElectronAuthProvider } from 'twitch-electron-auth-provider';
-import { queryStats, validateOcpKey } from './rest-client/rest-client';
+import { formatStats, queryStats, validateOcpKey } from './rest-client/rest-client';
 import ElectronStore = require('electron-store');
 
 declare const MAIN_WINDOW_WEBPACK_ENTRY: any;
@@ -54,11 +54,7 @@ const registerChatClient = () => {
     parts.slice(1).forEach(async (player) => {
       const stats = await queryStats(player);
       mainWindow.webContents.send('stats', stats);
-      if (stats.games > 0) {
-        chatClient.say(channel, `@${user} Stats for ${stats.player}: ${stats.wins} Wins, ${stats.losses} Losses, ${stats.winrate}% Winrate`);
-      } else {
-        chatClient.say(channel, `@${user} No stats found for "${stats.player}"`);
-      }
+      chatClient.say(channel, `@${user} ${formatStats(stats)}`);
     });
   });
 }

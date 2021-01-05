@@ -1,6 +1,6 @@
 import moment from "moment";
 import React, { useState } from "react";
-import { PlayerStats } from "../rest-client/rest-client";
+import { formatStats, PlayerStats } from "../rest-client/rest-client";
 import { useStyles } from "./LogCard.style";
 import CheckIcon from '@material-ui/icons/Check';
 import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
@@ -14,9 +14,7 @@ type Props = {
 
 export const LogCard = React.forwardRef(({ stats }: Props, ref) => {
     const classes = useStyles();
-    const [expanded, setExpaned] = useState<boolean>(false);
-
-    const text = stats.games > 0 ? `${stats.wins} Wins, ${stats.losses} Losses, ${stats.winrate}% Winrate` : `No stats found.`
+    const [expanded, setExpaned] = useState<boolean>(false)
 
     return (
         <Card key={stats.key} className={classes.root} ref={ref}>
@@ -42,7 +40,7 @@ export const LogCard = React.forwardRef(({ stats }: Props, ref) => {
             <Collapse in={expanded} timeout="auto" unmountOnExit>
                 <CardContent className={classes.stats}>
                     <Typography variant='caption'>
-                        {text}
+                        {formatStats(stats)}
                     </Typography>
                 </CardContent>
             </Collapse>
