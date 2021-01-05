@@ -48,14 +48,13 @@ const registerChatClient = () => {
   });
 
   chatClient.onMessage(async (channel, user, message) => {
-    const parts = split(message.trim(), /\s/);
     const command = store.get('command') || '!stats';
-    if (parts.length < 2 || parts[0] !== command) return;
-    parts.slice(1).forEach(async (player) => {
-      const stats = await queryStats(player);
-      mainWindow.webContents.send('stats', stats);
-      chatClient.say(channel, `@${user} ${formatStats(stats)}`);
-    });
+    message = message.trim();
+    if (!message.startsWith(command)) return;
+    const player = message.slice(command.length).trim();
+    const stats = await queryStats(player);
+    mainWindow.webContents.send('stats', stats);
+    chatClient.say(channel, `@${user} ${formatStats(stats)}`);
   });
 }
 

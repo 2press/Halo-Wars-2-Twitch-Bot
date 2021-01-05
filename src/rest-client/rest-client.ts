@@ -36,7 +36,7 @@ const rest: rm.RestClient = new rm.RestClient('halo-wars-2-twitch-bot', 'https:/
 
 export function formatStats(stats: PlayerStats) {
     if (stats.games > 0) {
-        return `Matckmaking stats for ${stats.player}: ${stats.wins} wins, ${stats.losses} losses, ${stats.winrate}% winrate, ${moment.duration(stats.timePlayed).humanize()} played in total, ${moment.duration(stats.avgGameTime).humanize()} average game length, ${stats.favLeader} favorit leader`;
+        return `Matckmaking stats for ${stats.player}: ${stats.wins} wins, ${stats.losses} losses, ${stats.winrate}% winrate, ${moment.duration(stats.timePlayed).humanize()} played in total, ${moment.duration(stats.avgGameTime).humanize()} average game length, ${stats.favLeader} favorite leader`;
     } else {
         return `No stats available for ${stats.player}.`;
     }
