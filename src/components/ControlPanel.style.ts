@@ -3,7 +3,7 @@ import { makeStyles } from "@material-ui/core";
 export const useStyles = makeStyles(() => ({
     root: {
         width: '100%',
-        height: '85vh',
+        height: '100%',
         display: 'flex',
         flexDirection: 'row',
         gap: '2ch',
@@ -27,7 +27,7 @@ export const useStyles = makeStyles(() => ({
 
     logs: {
         width: '50%',
-        height: '85vh',
+        height: 'calc(100vh - 30px)',
         overflowY: "scroll",
         scrollSnapType: 'y mandatory',
         scrollPadding: '1ch',
