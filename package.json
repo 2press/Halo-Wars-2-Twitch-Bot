@@ -84,6 +84,7 @@
     "typescript": "^4.0.2"
   },
   "dependencies": {
+    "@d-fischer/logger": "^3.1.0",
     "@material-ui/core": "^4.11.2",
     "@material-ui/icons": "^4.11.2",
     "@types/lodash": "^4.14.167",
@@ -95,7 +96,6 @@
     "moment": "^2.29.1",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
-    "store": "^2.0.12",
     "twitch-auth": "^4.3.8",
     "twitch-electron-auth-provider": "^4.3.8",
     "typed-rest-client": "^1.8.0"
