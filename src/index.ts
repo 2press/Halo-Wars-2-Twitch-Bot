@@ -73,6 +73,7 @@ const createWindow = async (): Promise<void> => {
   // and load the index.html of the app.
   mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
   mainWindow.removeMenu();
+  //mainWindow.webContents.openDevTools();
 
   registerChatClient();
 

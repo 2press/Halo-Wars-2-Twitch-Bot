@@ -3,7 +3,7 @@ import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
 import PauseCircleFilledIcon from '@material-ui/icons/PauseCircleFilled';
 import PlayCircleFilledIcon from '@material-ui/icons/PlayCircleFilled';
 import { ipcRenderer, shell } from 'electron';
-import { capitalize } from "lodash";
+import { capitalize, takeRight } from "lodash";
 import React, { useEffect, useRef, useState } from "react";
 import { SampleStore } from "../index";
 import { PlayerStats } from "../rest-client/rest-client";
@@ -47,7 +47,7 @@ export const ControlPanel: React.FC<Props> = () => {
         ipcRenderer.removeAllListeners('stats');
         ipcRenderer.removeAllListeners('bot-connection');
         ipcRenderer.on('stats', (_event, entry) => {
-            setLogs((old) => [...old, entry]);
+            setLogs((old) => takeRight([...old, entry], 15));
         });
 
         ipcRenderer.on('bot-connection', (_event, connected) => {
