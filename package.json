@@ -1,7 +1,7 @@
 {
   "name": "halo-wars-2-twitch-bot",
   "productName": "Halo Wars 2 Twitch Bot",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Halo Wars 2 Twitch Bot",
   "main": ".webpack/main",
   "scripts": {
