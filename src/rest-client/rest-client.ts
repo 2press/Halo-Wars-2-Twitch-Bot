@@ -1,4 +1,4 @@
-import { add, map, mapKeys, mapValues, max, maxBy, mergeWith, reduce, sum, uniqueId } from 'lodash';
+import { add, map, mapValues, maxBy, mergeWith, sum, uniqueId } from 'lodash';
 import moment from 'moment';
 import * as rm from 'typed-rest-client/RestClient';
 import { SampleStore } from '../index';
